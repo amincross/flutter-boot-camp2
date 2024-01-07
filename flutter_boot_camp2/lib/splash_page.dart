@@ -12,11 +12,56 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.purple),
-      body: Image.network(
-        "https://images.squarespace-cdn.com/content/v1/60f1a490a90ed8713c41c36c/1629223610791-LCBJG5451DRKX4WOB4SP/37-design-powers-url-structure.jpeg",
-      ),
+      body: Container(
+          width: size.width,
+          height: size.height,
+          child: Column(
+            children: [
+              Text("Sign UP!"),
+              Text("Please fill all fields"),
+
+              SizedBox(height: 50),
+
+              Container(
+                color: Colors.grey,
+                width: 250,
+                child: Column(
+                  children: [Text("Name: "), TextField()],
+                ),
+              ),
+
+              SizedBox(height: 80),
+
+              Container(
+                color: Colors.grey,
+                width: 250,
+                child: Column(
+                  children: [Text("Family: "), TextField()],
+                ),
+              ),
+
+              SizedBox(height: 80),
+
+              Container(
+                color: Colors.grey,
+                width: 250,
+                child: Column(
+                  children: [Text("Age: "), TextField()],
+                ),
+              ),
+
+              Row(
+                children: [
+                  ElevatedButton(onPressed: () {}, child: Text("Register")),
+                  Expanded(child: Container()),
+                  ElevatedButton(onPressed: () {}, child: Text("cancel")),
+                ],
+              )
+            ],
+          )),
     );
   }
 }
