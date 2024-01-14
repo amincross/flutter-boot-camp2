@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boot_camp2/home_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -13,72 +14,32 @@ class _SplashPageState extends State<SplashPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        backgroundColor: Colors.grey,
         body: Container(
-          margin: EdgeInsets.only(left: 36,right: 36),
-
       width: size.width,
       height: size.height,
+      decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/ic_splash.jpg"))),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          SizedBox(height: 50),
-
-          Align(
-            alignment: Alignment.center,
-              child: Text("SignUP",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 24),)),
-
-          Text("UserName",style: TextStyle(color: Colors.white,fontSize: 16),),
-          TextField(),
-
-          SizedBox(height: 25),
-
-          Text("Email",style: TextStyle(color: Colors.white,fontSize: 16),),
-          TextField(),
-
-          SizedBox(height: 25),
-
-          Text("Password",style: TextStyle(color: Colors.white,fontSize: 16),),
-          TextField(),
-
-
-          SizedBox(height: 25),
-          Text("Confirm Passwrod",style: TextStyle(color: Colors.white,fontSize: 16),),
-          TextField(),
-
-          SizedBox(height: 25),
-
-          Container(
-            width: size.width,
-              child: ElevatedButton(onPressed: (){}, child: Text("SignUP"))),
-
-          SizedBox(height: 25),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-
-              Container(width: 150,height: 1,color: Colors.black),
-              Text("Or Sign Up With"),
-              Container(width: 150,height: 1,color: Colors.black),
-
-            ],
+          Expanded(child: Container()),
+          Text(
+            "VALLEY",
+            style: TextStyle(fontSize: 48, color: Colors.white, fontWeight: FontWeight.bold),
           ),
+          Expanded(child: Container()),
+          Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(50))),
+            child: FloatingActionButton(
+              onPressed: () {
 
-          SizedBox(height: 25),
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(color: Colors.greenAccent,width: 100,height: 50,child: Icon(Icons.abc)),
-
-              Container(color: Colors.greenAccent,width: 100,height: 50,child: Icon(Icons.account_box_rounded)),
-
-              Container(color: Colors.greenAccent,width: 100,height: 50,child: Icon(Icons.accessible_rounded)),
-            ],
-          )
-
+              },
+              child: Icon(Icons.arrow_right_alt_rounded,size: 46,),
+              backgroundColor: Color(0xFFC06D59),
+            ),
+          ),
+          SizedBox(height: 50),
         ],
       ),
     ));
