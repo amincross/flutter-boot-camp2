@@ -13,11 +13,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePAgeState extends State<HomePage> {
 
-
   List<String> categories = [];
-  List<Product>productList=[];
+  List<Product> productList = [];
 
-  int selectedCategoryIndex=-1;
+  int selectedCategoryIndex = -1;
 
   @override
   void initState() {
@@ -26,28 +25,28 @@ class _HomePAgeState extends State<HomePage> {
     super.initState();
   }
 
-  getApiCategories()async{
-    String url="https://fakestoreapi.com/products/categories";
+  getApiCategories() async {
+    String url = "https://fakestoreapi.com/products/categories";
 
-    var result=await http.get(Uri.parse(url));
-    categories=(jsonDecode(result.body) as List)
+    var result = await http.get(Uri.parse(url));
+
+    categories = (jsonDecode(result.body) as List)
         .map((data) => data.toString())
         .toList();
-    setState(() {
 
-    });
+    setState(() {});
   }
 
-  getApiProducts()async{
-    String url="https://fakestoreapi.com/products";
+  getApiProducts() async {
+    String url = "https://fakestoreapi.com/products";
 
-    var result=await http.get(Uri.parse(url));
-    productList=(jsonDecode(result.body) as List)
+    var result = await http.get(Uri.parse(url));
+
+    productList = (jsonDecode(result.body) as List)
         .map((data) => Product.fromJson(data))
         .toList();
-    setState(() {
 
-    });
+    setState(() {});
   }
 
   @override
@@ -114,25 +113,21 @@ class _HomePAgeState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: (){
-                      selectedCategoryIndex=index;
-                      setState(() {
-
-                      });
+                    onTap: () {
+                      selectedCategoryIndex = index;
+                      setState(() {});
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: (index==selectedCategoryIndex)?Colors.black:Colors.white,
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(15))
+                          color: (index == selectedCategoryIndex) ? Colors.black : Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      child: Text(
+                        categories[index],
+                        style: TextStyle(color: (index == selectedCategoryIndex) ? Colors.white : Colors.black),
                       ),
-
-                      child: Text(categories[index],style: TextStyle(color: (index==selectedCategoryIndex)?Colors.white:Colors.black),),
-
-
-
                       margin: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                     ),
                   );
@@ -140,8 +135,37 @@ class _HomePAgeState extends State<HomePage> {
                 itemCount: categories.length,
               ),
             ),
-
             Container(
+              width: screenSize.width,
+              height: 450,
+              child: GridView.count(
+                crossAxisCount: 2,
+                children: List.generate(productList.length, (index) {
+                  Product currentItem = productList[index];
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.network(currentItem.image ?? "", width: (screenSize.width / 2) - 30, height: 130),
+
+                      Row(children: [
+                        SizedBox(width: 8),
+                        Text("\$"+(currentItem.price ?? 0.0).toString()),
+                        Expanded(child: Container()),
+                        Icon(Icons.favorite_border),
+                        SizedBox(width: 8),
+                      ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+
+
+
+                      Text(currentItem.title ?? "Empty",overflow: TextOverflow.ellipsis,maxLines: 1,)
+                    ],
+                  );
+                }),
+              ),
+            )
+
+            /*Container(
               width: screenSize.width,
               height: 400,
               child: ListView.builder(
@@ -150,21 +174,18 @@ class _HomePAgeState extends State<HomePage> {
 
                   Product currentItem=productList[index];
 
-
-                  return Column(
+                  return Row(
                     children: [
-                      Text((currentItem.id??0).toString()),
-                      Text(currentItem.title??"Empty"),
-                      Text(currentItem.description??"Empty"),
+                      Image.network(currentItem.image??"",width: 50,height: 50),
+                      Text(currentItem.title??""),
                       Text((currentItem.price??0.0).toString()),
+
                     ],
                   );
+
                 },
               ),
-            )
-
-
-
+            )*/
           ],
         ),
       ),
