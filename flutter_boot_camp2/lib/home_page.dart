@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_boot_camp2/product.dart';
 import 'package:http/http.dart' as http;
 
+import 'show_product_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -143,23 +145,28 @@ class _HomePAgeState extends State<HomePage> {
                 children: List.generate(productList.length, (index) {
                   Product currentItem = productList[index];
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.network(currentItem.image ?? "", width: (screenSize.width / 2) - 30, height: 130),
+                  return InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowProductPage(productId: currentItem.id??1)));
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.network(currentItem.image ?? "", width: (screenSize.width / 2) - 30, height: 130),
 
-                      Row(children: [
-                        SizedBox(width: 8),
-                        Text("\$"+(currentItem.price ?? 0.0).toString()),
-                        Expanded(child: Container()),
-                        Icon(Icons.favorite_border),
-                        SizedBox(width: 8),
-                      ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                        Row(children: [
+                          SizedBox(width: 8),
+                          Text("\$"+(currentItem.price ?? 0.0).toString()),
+                          Expanded(child: Container()),
+                          Icon(Icons.favorite_border),
+                          SizedBox(width: 8),
+                        ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
 
 
 
-                      Text(currentItem.title ?? "Empty",overflow: TextOverflow.ellipsis,maxLines: 1,)
-                    ],
+                        Text(currentItem.title ?? "Empty",overflow: TextOverflow.ellipsis,maxLines: 1,)
+                      ],
+                    ),
                   );
                 }),
               ),
