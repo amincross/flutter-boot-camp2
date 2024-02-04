@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boot_camp2/bag_page.dart';
 import 'package:flutter_boot_camp2/product.dart';
 import 'package:http/http.dart' as http;
 
@@ -77,9 +78,14 @@ class _HomePAgeState extends State<HomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(
-              Icons.card_travel,
-              color: Colors.white,
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>BagPage()));
+              },
+              child: Icon(
+                Icons.card_travel,
+                color: Colors.white,
+              ),
             ),
             Icon(
               Icons.favorite_border,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_boot_camp2/product.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShowProductPage extends StatefulWidget {
   int productId;
@@ -57,7 +58,9 @@ class _ShowProductPageState extends State<ShowProductPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.arrow_back_ios_new_outlined),
+                          InkWell(onTap: (){
+                            Navigator.pop(context);
+                          },child: Icon(Icons.arrow_back_ios_new_outlined)),
                           Icon(Icons.favorite_border),
 
                         ],
@@ -80,14 +83,17 @@ class _ShowProductPageState extends State<ShowProductPage> {
                       SizedBox(width: 8),
                     ],
                   ),
-                  Text(
-                    newProduct!.description ?? "",
-                    maxLines: 5,
-                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    child: Text(
+                      newProduct!.description ?? "",
+                      maxLines: 5,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
                   ),
                   SizedBox(height: 24),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Column(
                         children: [
@@ -209,22 +215,65 @@ class _ShowProductPageState extends State<ShowProductPage> {
                     ],
                   ),
                   SizedBox(height: 50),
-                  Container(
-                    width: screenSize.width-50,
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    child: Text(
-                      "+ add to bag",
-                      style: TextStyle(color: Colors.white),
+                  InkWell(
+                    onTap: (){
+                      _addToBag();
+                    },
+                    child: Container(
+                      width: screenSize.width-50,
+                      height: 50,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                      child: Text(
+                        "+ add to bag",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   )
                 ],
               ),
       ),
     );
+  }
+
+  void _addToBag()async {
+    if(newProduct==null)
+      return;
+
+    //باز کردن حافظه
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    //خواندن لیست رشته
+    List<String> prodList = prefs.getStringList("bag")??[];
+
+    //تبدیل لیست رشته به لیست محصول
+    List<Product>products=prodList.map((item) => Product.fromJson(json.decode(item))).toList();
+
+    bool isInBag=false;
+    products.forEach((element) {
+      if(element.id==newProduct!.id){
+        isInBag=true;
+      }
+    });
+
+    if(isInBag){
+      //add product count
+    }else{
+      //اضافه کردن مخصول حال حاضر
+      products.add(newProduct!);
+    }
+
+    //تبدیل لیست نهایی به لیست رشته
+    List<String> setOfProducts=products
+        .map((item) => json.encode(item).toString())
+        .toList();
+
+    //ذخیره لیست رشته در حافظه
+    prefs.setStringList("bag", setOfProducts);
+
+
   }
 }
