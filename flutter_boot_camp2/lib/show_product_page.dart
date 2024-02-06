@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_boot_camp2/bag.dart';
 import 'package:flutter_boot_camp2/product.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -71,9 +73,14 @@ class _ShowProductPageState extends State<ShowProductPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(width: 8),
-                      Text(
-                        newProduct!.title.toString(),
-                        style: TextStyle(color: Colors.black, fontSize: 24),
+                      Container(
+                        width: screenSize.width*0.7,
+                        child: Text(
+                          newProduct!.title.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(color: Colors.black, fontSize: 24),
+                        ),
                       ),
                       Expanded(child: Container()),
                       Text(
@@ -247,32 +254,60 @@ class _ShowProductPageState extends State<ShowProductPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     //خواندن لیست رشته
-    List<String> prodList = prefs.getStringList("bag")??[];
+    List<String> bagList = prefs.getStringList("bag")??[];
 
     //تبدیل لیست رشته به لیست محصول
-    List<Product>products=prodList.map((item) => Product.fromJson(json.decode(item))).toList();
+    List<Bag>bags=bagList.map((item) => Bag.fromJson(json.decode(item))).toList();
 
     bool isInBag=false;
-    products.forEach((element) {
-      if(element.id==newProduct!.id){
+    bags.forEach((element) {
+      if(element.product!.id==newProduct!.id){
         isInBag=true;
       }
     });
 
     if(isInBag){
       //add product count
+      bags.forEach((element) {
+        if(element.product!.id==newProduct!.id){
+            element.quantity++;
+        }
+      });
+
+      Fluttertoast.showToast(
+          msg: "به تعداد محصول اضافه شد",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+
     }else{
       //اضافه کردن مخصول حال حاضر
-      products.add(newProduct!);
+      Bag newBag=Bag(product: newProduct!, color: color, size: size, quantity: 1);
+      bags.add(newBag);
+
+      Fluttertoast.showToast(
+          msg: "محصول به سبد خرید اضافه شد",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
     }
 
     //تبدیل لیست نهایی به لیست رشته
-    List<String> setOfProducts=products
+    List<String> setOfBags=bags
         .map((item) => json.encode(item).toString())
         .toList();
 
     //ذخیره لیست رشته در حافظه
-    prefs.setStringList("bag", setOfProducts);
+    prefs.setStringList("bag", setOfBags);
+
 
 
   }

@@ -67,7 +67,9 @@ class _HomePAgeState extends State<HomePage> {
             color: Colors.black,
           ),
           SizedBox(width: 12),
-          Icon(Icons.card_travel, color: Colors.black),
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>BagPage()));
+          }, icon: Icon(Icons.card_travel, color: Colors.black)),
           SizedBox(width: 20)
         ],
       ),
